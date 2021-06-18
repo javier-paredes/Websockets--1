@@ -89,29 +89,26 @@ routerApi.delete('/productos/borrar/:id', (req, res) => {
 // SE EJECUTA AL REALIZAR LA PRIMERA CONEXION
 io.on('connection', async socket => {
     console.log('Usuario conectado')
-
-    // socket.on('nuevo-producto', (data) => {
-    //     console.log(data)
-    // })
-
+  
+    // GUARDAR PRODUCTO
     socket.on('nuevo-producto', nuevoProducto => {
         console.log(nuevoProducto)
         productos.guardar(nuevoProducto)
     })
-
-
+    // VERIFICAR QUE SE AGREGA UN PRODUCTO
     socket.emit('guardar-productos', () => {
         socket.on('notificacion', data => {
             console.log(data)
         })
     })
-
+    // ACTUALIZAR TABLA
     socket.emit('actualizar-tabla', productos.producto)
 });
 
 // pongo a escuchar el servidor en el puerto indicado
 const puerto = 8080;
 
+// USO server PARA EL LISTEN
 const svr = server.listen(puerto, () => {
     console.log(`servidor escuchando en http://localhost:${puerto}`);
 });
